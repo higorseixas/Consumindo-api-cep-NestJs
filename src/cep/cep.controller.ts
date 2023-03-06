@@ -34,6 +34,21 @@ export class CepController {
       });
   }
 
+  @Get('getAllCep')
+  @HttpCode(HttpStatus.OK)
+  async getAllCep() {
+    const ceps = await this.cepService
+      .getAllCep()
+      .then((result) => {
+        return result;
+      })
+      .catch((e) => {
+        console.log(e);
+        throw new InternalServerErrorException();
+      });
+    return ceps;
+  }
+
   @Get('getCep')
   @HttpCode(HttpStatus.OK)
   async getCep(@Req() req) {
@@ -48,7 +63,7 @@ export class CepController {
   }
 
   @Delete('deleteCep')
-  @HttpCode(HttpCode.OK)
+  @HttpCode(HttpStatus.OK)
   async deleteCep(@Req() req) {
     return this.cepService
       .deleteCep(req.query.cep)

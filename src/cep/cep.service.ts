@@ -59,6 +59,15 @@ export class CepService {
     );
   }
 
+  async getAllCep() {
+    return this.prisma.cep
+      .findMany({ select: { id: true, cep: true, bairro: true } })
+      .then((result) => result)
+      .catch((e) => {
+        console.log(e);
+      });
+  }
+
   async getCep(cep: string) {
     return this.prisma.cep
       .findUnique({
