@@ -1,6 +1,6 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
-import { identity, map } from 'rxjs';
+import { map } from 'rxjs';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
@@ -22,6 +22,15 @@ export class CepService {
         const cepExist = this.prisma.cep.findUnique({
           where: { cep: cep },
         });
+
+        const state = this.prisma.state.findUnique({
+          where: { uf: data.uf },
+        });
+
+        let flag = false;
+        if (state) {
+          flag = true;
+        }
 
         if (cepExist) {
           return this.prisma.cep.update({
@@ -51,6 +60,7 @@ export class CepService {
               uf: data.uf,
               ibge: data.ibge,
               gia: data.gia,
+              flag: flag,
               ddd: data.ddd,
               siafi: data.siafi,
             },
