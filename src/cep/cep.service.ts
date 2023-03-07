@@ -117,4 +117,9 @@ export class CepService {
       }
     }
   }
+
+  async removeDashFromCep(cep: string): Promise<string> {
+    const cepWithoutHifen = cep.replace(/-/g, '');
+    return cepWithoutHifen;
+  }
 }

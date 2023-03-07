@@ -10,7 +10,6 @@ import {
   Req,
   Delete,
 } from '@nestjs/common';
-import { get } from 'http';
 import { CepService } from './cep.service';
 
 @Controller('cep')
@@ -23,8 +22,11 @@ export class CepController {
   @Get('getAddress')
   @HttpCode(HttpStatus.OK)
   async getAddress(@Req() req) {
+    const cepWithoutHifen = await this.cepService.removeDashFromCep(
+      req.query.cep,
+    );
     return this.cepService
-      .getAddress(req.query.cep)
+      .getAddress(cepWithoutHifen)
       .then((result) => {
         return result;
       })
