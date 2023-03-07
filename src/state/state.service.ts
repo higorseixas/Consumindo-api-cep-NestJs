@@ -50,6 +50,9 @@ export class StateService {
           },
         });
       })
+      .then(() => {
+        this.updateCepFlagByUf(uf);
+      })
       .catch((error) => {
         throw error;
       });
@@ -93,5 +96,23 @@ export class StateService {
       .catch((error) => {
         throw error;
       });
+  }
+
+  async updateCepFlagByUf(uf: string) {
+    const states = await this.prisma.state.findMany({
+      where: { uf: uf },
+    });
+    for (const state of states) {
+      const uf = state.uf;
+      const ceps = await this.prisma.cep.findMany({
+        where: { uf },
+      });
+      for (const cep of ceps) {
+        await this.prisma.cep.update({
+          where: { id: cep.id },
+          data: { flag: true },
+        });
+      }
+    }
   }
 }

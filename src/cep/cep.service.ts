@@ -112,22 +112,6 @@ export class CepService {
       });
   }
 
-  async updateCepFlagByUf() {
-    const states = await this.prisma.state.findMany({});
-    for (const state of states) {
-      const uf = state.uf;
-      const ceps = await this.prisma.cep.findMany({
-        where: { uf },
-      });
-      for (const cep of ceps) {
-        await this.prisma.cep.update({
-          where: { id: cep.id },
-          data: { flag: true },
-        });
-      }
-    }
-  }
-
   async removeDashFromCep(cep: string): Promise<string> {
     const cepWithoutHifen = cep.replace(/-/g, '');
     return cepWithoutHifen;
